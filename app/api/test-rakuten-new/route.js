@@ -6,12 +6,14 @@ import https from "node:https";
 
 function rakutenRequest(appId, accessKey, keyword) {
   return new Promise((resolve, reject) => {
+    const SITE = "https://my-nextjs-app-chi-woad.vercel.app/";
     const params = new URLSearchParams({
       applicationId: appId,
       accessKey: accessKey,
       keyword: keyword,
       hits: "1",
       formatVersion: "2",
+      referer: SITE,        // クエリパラメータでも試す
     });
 
     const options = {
@@ -19,7 +21,8 @@ function rakutenRequest(appId, accessKey, keyword) {
       path: `/ichibams/api/IchibaItem/Search/20260401?${params}`,
       method: "GET",
       headers: {
-        Referer: "https://webservice.rakuten.co.jp/",
+        Referer: SITE,
+        Origin: "https://my-nextjs-app-chi-woad.vercel.app",
         "User-Agent": "Mozilla/5.0 (compatible; Node.js)",
         Accept: "application/json",
       },
@@ -64,7 +67,7 @@ export async function GET() {
     return Response.json({
       success: true,
       envCheck,
-      triedReferer: "https://webservice.rakuten.co.jp/",
+      tried: "refererをクエリパラメータ + Origin + Refererヘッダー",
       item: item ? { name: item.itemName, price: item.itemPrice, shop: item.shopName } : null,
     });
   } catch (err) {
