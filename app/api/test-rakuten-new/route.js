@@ -19,8 +19,9 @@ function rakutenRequest(appId, accessKey, keyword) {
       path: `/ichibams/api/IchibaItem/Search/20260401?${params}`,
       method: "GET",
       headers: {
-        Referer: "https://my-nextjs-app-chi-woad.vercel.app/",
-        "User-Agent": "Node.js",
+        Referer: "https://webservice.rakuten.co.jp/",
+        "User-Agent": "Mozilla/5.0 (compatible; Node.js)",
+        Accept: "application/json",
       },
     };
 
@@ -55,10 +56,15 @@ export async function GET() {
       return Response.json({ error: "楽天APIエラー", status, body: data, envCheck });
     }
 
-    const item = data.Items?.[0];
+    // formatVersion=2 → Items[0].itemName（フラット形式）
+    const raw = data.Items?.[0];
+    const item = raw?.itemName
+      ? raw                   // formatVersion=2: フラット
+      : raw?.Item ?? null;    // formatVersion=1: ネスト
     return Response.json({
       success: true,
       envCheck,
+      triedReferer: "https://webservice.rakuten.co.jp/",
       item: item ? { name: item.itemName, price: item.itemPrice, shop: item.shopName } : null,
     });
   } catch (err) {
