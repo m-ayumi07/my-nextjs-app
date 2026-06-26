@@ -8,6 +8,7 @@ function rakutenRequest(appId, accessKey, keyword) {
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams({
       applicationId: appId,
+      accessKey: accessKey,
       keyword: keyword,
       hits: "1",
       formatVersion: "2",
@@ -18,8 +19,7 @@ function rakutenRequest(appId, accessKey, keyword) {
       path: `/ichibams/api/IchibaItem/Search/20260401?${params}`,
       method: "GET",
       headers: {
-        accessKey: accessKey,
-        Referer: "https://example.com/",
+        Referer: "https://my-nextjs-app-chi-woad.vercel.app/",
         "User-Agent": "Node.js",
       },
     };
