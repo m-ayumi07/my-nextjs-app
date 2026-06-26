@@ -19,7 +19,7 @@ function rakutenRequest(appId, accessKey, keyword) {
       method: "GET",
       headers: {
         accessKey: accessKey,
-        Referer: "https://my-nextjs-app-chi-woad.vercel.app/",
+        Referer: "https://example.com/",
         "User-Agent": "Node.js",
       },
     };
